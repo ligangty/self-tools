@@ -3,6 +3,24 @@
 # used to deploy indy from a archive on local, and keep all configuration 
 # and storage not changed
 
+INDY_SRC=/tmp/$1
+OLD_INDY_LOC=$HOME/deploy/indy
+
+wait_process()
+{
+  processId=$1
+  if [ "a$processId" == "a" ]; then
+    return -1
+  fi
+
+  while ps -p $processId 
+  do
+    sleep 1s
+  done
+   
+  return 1
+}
+
 if [ "x$1" == "x" ]; then
   echo "usage: $0 indy-launcher.tar.gz";
   exit 0;
@@ -13,8 +31,6 @@ if [ ! -f $1 ]; then
   exit 0;
 fi
 
-INDY_SRC=/tmp/$1
-OLD_INDY_LOC=$HOME/deploy/indy
 
 if [[ $1 == *.gz ]]; then
   mkdir $INDY_SRC 
@@ -30,8 +46,12 @@ else
 fi
 
 # stop old indy
-echo "stopping old indy instance"
-kill `ps -ef | grep -v grep | grep indy | grep java | awk '{print $2}'`
+processId=`ps -ef | grep -v grep | grep indy | grep java | awk '{print $2}'`
+if [ $processId > 0 ]; then
+  echo "stopping old indy instance"
+  kill $processId
+  wait_process $processId 
+fi
 
 # backup old indy
 #DATE=`date +%Y-%m-%d`
@@ -58,8 +78,8 @@ cp -r $INDY_SRC/indy/var/lib/indy/ui $OLD_INDY_LOC/var/lib/indy/
 # start indy
 echo "starting new indy instance"
 nohup $OLD_INDY_LOC/bin/indy.sh >> $OLD_INDY_LOC/var/log/indy/indy.log 2>&1 &
+sleep 5s
 
 # remove temp extracted files
 echo "remove temp extracted files"
 rm -rf $INDY_SRC
-
