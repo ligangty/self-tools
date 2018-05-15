@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 
-# This script is used to check the differences of the plugins installation
-# between two jenkins instances
 
 import xml.etree.ElementTree as ET
 from distutils.version import LooseVersion, StrictVersion
 from argparse import ArgumentParser
 
+"""
+  Plugin compare tool to list plugins differences between two jenkins instance by plugin xml.
+  Need to get plugin installed xml using this: http://${jenkins}/pluginManager/api/xml?depth=1
+"""
 
 class PluginInfo(object):
     def __init__(self, shortName, longName, version):
