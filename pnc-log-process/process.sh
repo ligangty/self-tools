@@ -23,11 +23,11 @@ if [[ "$FILE" == ""  ||  ! -f $FILE ]]; then
 fi
 
 if [ -f TMP_FILE ]; then
-  rm $TMP_FILE;
+  rm -f $TMP_FILE;
 fi
 
 if [ -f TMP_PROCESS ]; then
-  rm $TMP_PROCESS;
+  rm -f $TMP_PROCESS;
 fi
 
 grep 'Downloaded:' $1 > $TMP_FILE;
@@ -51,9 +51,9 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 done < $TMP_FILE
 
 if [ -f $FINAL_PROCESS ]; then
-  rm $FINAL_PROCESS;
+  rm -f $FINAL_PROCESS;
 fi
 
 sort -t, -k1,1 -k2,2r $TMP_PROCESS > $FINAL_PROCESS;
 sed -i '1s/^/Repo+GAV,File,Size,Down_speed,Unit\n/' $FINAL_PROCESS;
-rm $TMP_PROCESS $TMP_FILE;
+rm -f $TMP_PROCESS $TMP_FILE;
