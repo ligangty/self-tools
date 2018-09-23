@@ -5,15 +5,17 @@
 # GAV   File   Size    Download_Speed
 #
 # It can help to analyze which part of the downloading is slow
-# 
+#
 # P.S: all other maven build logs can also be used as source file for this script
 ##
 
 FILE=$1
+DIR=$(realpath $(dirname $0));
+TMPDIR=/tmp;
 
-TMP_FILE=/tmp/pnc-maven-origin.tmp;
-TMP_PROCESS=/tmp/pnc-maven-processed.tmp;
-FINAL_PROCESS=./pnc-download-artifacts.csv;
+TMP_FILE=$TMPDIR/pnc-maven-origin.tmp;
+TMP_PROCESS=$TMPDIR/pnc-maven-processed.tmp;
+FINAL_PROCESS=$DIR/pnc-download-artifacts.csv;
 
 
 if [[ "$FILE" == ""  ||  ! -f $FILE ]]; then
@@ -57,3 +59,5 @@ fi
 sort -t, -k1,1 -k2,2r $TMP_PROCESS > $FINAL_PROCESS;
 sed -i '1s/^/Repo+GAV,File,Size,Down_speed,Unit\n/' $FINAL_PROCESS;
 rm -f $TMP_PROCESS $TMP_FILE;
+
+echo "Processed anaylized file generated at $FINAL_PROCESS";
