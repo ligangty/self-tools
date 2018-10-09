@@ -33,6 +33,7 @@ if [ -f TMP_PROCESS ]; then
 fi
 
 grep 'Downloaded:' $1 > $TMP_FILE;
+sed -i 's;\[INFO\];;g' $TMP_FILE;
 sed -i 's;\(Downloaded: http://[^/]*/api/folo/track/[^/]*\)/\(.*\);/\2;g' $TMP_FILE;
 sed -i 's;(\(.*\));\1;g' $TMP_FILE;
 sed -i 's;\([0-9]\+\) ;\1;1' $TMP_FILE;
