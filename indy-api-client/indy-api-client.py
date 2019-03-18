@@ -5,16 +5,20 @@ import sys
 def main():
     desc = "Indy api client with authentication to keycloak."
     parser = argparse.ArgumentParser(description=desc)
-    parser.add_argument('--kc_host',  type=str, 
+    parser.add_argument( '-k', "--kc_host", type=str, 
                         help='keycloak server host, not provided means no authentication needed.')
-    parser.add_argument('--kc_prj', metavar='-p', type=str, 
+    parser.add_argument( '-p', '--kc_prj', type=str, 
                         help='keycloak project name, not provided means no authentication needed.')
-    parser.add_argument('--indy_host', metavar='-i', type=str, required=True,
+    parser.add_argument( '-i', "--indy_host", type=str, required=True,
                         help='indy host which to connect to.')
     args = parser.parse_args()
-
-    kcHost = args.kc_host, kcPrj = args.kc_prj
-    authNeed = (kcHost is not None) and (kcPrj is not None)
+    for arg in vars(args):
+        print(arg, getattr(args, arg))
+   
+    authNeed = (args.kc_host is not None) and (args.kc_prj is not None)
+    if(authNeed):
+        kcHost = args.kc_host, kcPrj = args.kc_prj
+    
 
 
     print("auth needed: %s" % authNeed )
