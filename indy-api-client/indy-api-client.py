@@ -17,12 +17,17 @@ def main():
    
     authNeed = (args.kc_host is not None) and (args.kc_prj is not None)
     if(authNeed):
-        kcHost = args.kc_host, kcPrj = args.kc_prj
-    
+        kcHost = args.kc_host 
+        kcPrj = args.kc_prj
+        kcAuthUrl = "%s/auth/realms/%s/protocol/openid-connect/token" % (kcHost,kcPrj)
+        print(kcAuthUrl)
 
-
-    print("auth needed: %s" % authNeed )
-    
+#        curl \
+#  -d "client_id=admin-cli" \
+#  -d "username=admin" \
+#  -d "password=password" \
+#  -d "grant_type=password" \
+#  "http://localhost:8080/"
 
 if __name__=="__main__": main()
 
